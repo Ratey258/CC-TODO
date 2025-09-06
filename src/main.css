@@ -474,6 +474,13 @@ section:hover {
   background-clip: text;
 }
 
+.user-name {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .name-input {
   background: transparent;
   border: none;

@@ -47,6 +47,31 @@ const toggleTheme = () => {
 	isDarkMode.value = !isDarkMode.value
 }
 
+// 获取欢迎消息
+const getWelcomeMessage = () => {
+	const messages = [
+		'今天也要加油哦！✨',
+		'让我们一起完成今天的目标吧！🎯',
+		'每一个小步骤都是进步！🌟',
+		'保持专注，你可以做到的！💪',
+		'今天是充满可能性的一天！🚀',
+		'一步一个脚印，稳步前进！🌈',
+		'相信自己，你很棒！⭐',
+		'新的一天，新的开始！🌅'
+	]
+	
+	const hour = new Date().getHours()
+	if (hour < 6) {
+		return '夜深了，记得早点休息哦！🌙'
+	} else if (hour < 12) {
+		return messages[Math.floor(Math.random() * messages.length)]
+	} else if (hour < 18) {
+		return '午后时光，继续保持动力！☀️'
+	} else {
+		return '晚上好！今天过得怎么样？🌆'
+	}
+}
+
 // 用户管理函数
 const getUsers = () => {
 	return JSON.parse(localStorage.getItem('users')) || {}
@@ -279,17 +304,14 @@ onMounted(() => {
 			<!-- 问候区域 -->
 			<section class="greeting glass">
 				<div class="greeting-content">
-					<h2 class="greeting-title">
-						<span class="greeting-text">你好，</span>
-						<input 
-							type="text" 
-							class="name-input" 
-							placeholder="请输入姓名" 
-							v-model="name"
-							maxlength="20"
-						>
-						<span class="wave">👋</span>
-					</h2>
+					<div class="welcome-header">
+						<h2 class="greeting-title">
+							<span class="greeting-text">欢迎回来，</span>
+							<span class="user-name">{{ currentUser?.username || '用户' }}</span>
+							<span class="wave">👋</span>
+						</h2>
+						<p class="welcome-message">{{ getWelcomeMessage() }}</p>
+					</div>
 					
 					<!-- 进度统计 -->
 					<div class="stats-grid">
