@@ -10,6 +10,7 @@ const input_category = ref(null)
 const isDarkMode = ref(false)
 const showDeleteModal = ref(false)
 const todoToDelete = ref(null)
+const showLogoutModal = ref(false)
 
 // 用户相关状态
 const currentUser = ref(null)
@@ -104,6 +105,30 @@ const login = () => {
 	showLoginModal.value = false
 }
 
+// 显示退出确认模态框
+const showLogoutConfirmation = () => {
+	showLogoutModal.value = true
+}
+
+// 确认退出
+const confirmLogout = () => {
+	if (currentUser.value) {
+		saveUserData() // 保存当前数据
+	}
+	currentUser.value = null
+	name.value = ''
+	todos.value = []
+	localStorage.removeItem('currentUser')
+	showLogoutModal.value = false
+	showLoginModal.value = true
+}
+
+// 取消退出
+const cancelLogout = () => {
+	showLogoutModal.value = false
+}
+
+// 原来的logout函数保留备用
 const logout = () => {
 	if (currentUser.value) {
 		saveUserData() // 保存当前数据
@@ -241,7 +266,7 @@ onMounted(() => {
 							<Icons :name="isDarkMode ? 'sun' : 'moon'" />
 						</span>
 					</button>
-					<button class="logout-button" @click="logout" v-if="currentUser" title="退出登录">
+					<button class="logout-button" @click="showLogoutConfirmation" v-if="currentUser" title="退出登录">
 						<span class="logout-icon">
 							<Icons name="log-out" />
 						</span>
@@ -467,6 +492,52 @@ onMounted(() => {
 									<Icons name="trash" />
 								</span>
 								删除
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</Transition>
+
+		<!-- 退出确认模态框 -->
+		<Transition name="modal">
+			<div v-if="showLogoutModal" class="modal-overlay" @click="cancelLogout">
+				<div class="logout-modal" @click.stop>
+					<div class="modal-header">
+						<div class="modal-icon">
+							<span class="warning-icon">
+								<Icons name="log-out" />
+							</span>
+						</div>
+						<h3 class="modal-title">确认退出登录</h3>
+					</div>
+					
+					<div class="modal-content">
+						<p class="modal-message">
+							确定要退出登录吗？您的待办事项已自动保存。
+						</p>
+						
+						<div class="modal-actions">
+							<button 
+								class="modal-button cancel" 
+								@click="cancelLogout"
+								type="button"
+							>
+								<span class="button-icon">
+									<Icons name="x" />
+								</span>
+								取消
+							</button>
+							
+							<button 
+								class="modal-button confirm" 
+								@click="confirmLogout"
+								type="button"
+							>
+								<span class="button-icon">
+									<Icons name="log-out" />
+								</span>
+								退出
 							</button>
 						</div>
 					</div>
