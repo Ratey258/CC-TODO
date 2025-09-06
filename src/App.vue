@@ -277,9 +277,6 @@ onMounted(() => {
 
 				<!-- 空状态 -->
 				<div class="empty-state glass" v-else>
-					<div class="empty-icon">
-						<Icons name="celebrate" />
-					</div>
 					<h3 class="empty-title">全部完成！</h3>
 					<p class="empty-text">您暂时没有任务。在上方创建一个任务开始吧。</p>
 				</div>
