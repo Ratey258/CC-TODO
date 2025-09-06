@@ -8,6 +8,8 @@ const name = ref('')
 const input_content = ref('')
 const input_category = ref(null)
 const isDarkMode = ref(false)
+const showDeleteModal = ref(false)
+const todoToDelete = ref(null)
 
 // 监听主题变化
 watch(isDarkMode, (newVal) => {
@@ -56,7 +58,27 @@ const todos_asc = computed(() => todos.value.sort((a, b) => {
 	return a.createdAt - b.createdAt
 }))
 
-// 删除待办事项的函数
+// 显示删除确认模态框
+const showDeleteConfirmation = (todo) => {
+	todoToDelete.value = todo
+	showDeleteModal.value = true
+}
+
+// 确认删除待办事项
+const confirmDelete = () => {
+	if (todoToDelete.value) {
+		todos.value = todos.value.filter((t) => t !== todoToDelete.value)
+	}
+	cancelDelete()
+}
+
+// 取消删除
+const cancelDelete = () => {
+	showDeleteModal.value = false
+	todoToDelete.value = null
+}
+
+// 删除待办事项的函数（保留以防万一，但现在不直接使用）
 const removeTodo = (todo) => {
 	todos.value = todos.value.filter((t) => t !== todo)
 }
@@ -263,7 +285,7 @@ onMounted(() => {
 							<div class="todo-actions">
 									<button 
 										class="action-button delete" 
-										@click="removeTodo(todo)"
+										@click="showDeleteConfirmation(todo)"
 										title="删除任务"
 									>
 									<span class="action-icon">
@@ -282,5 +304,53 @@ onMounted(() => {
 				</div>
 			</section>
 		</main>
+
+		<!-- 删除确认模态框 -->
+		<Transition name="modal">
+			<div v-if="showDeleteModal" class="modal-overlay" @click="cancelDelete">
+				<div class="delete-modal" @click.stop>
+					<div class="modal-header">
+						<div class="modal-icon">
+							<span class="warning-icon">
+								<Icons name="alert-triangle" />
+							</span>
+						</div>
+						<h3 class="modal-title">确认删除任务</h3>
+					</div>
+					
+					<div class="modal-content">
+						<p class="modal-message">
+							确定要删除任务
+							<strong v-if="todoToDelete">"{{ todoToDelete.content }}"</strong>
+							吗？此操作无法撤销。
+						</p>
+						
+						<div class="modal-actions">
+							<button 
+								class="modal-button cancel" 
+								@click="cancelDelete"
+								type="button"
+							>
+								<span class="button-icon">
+									<Icons name="x" />
+								</span>
+								取消
+							</button>
+							
+							<button 
+								class="modal-button confirm" 
+								@click="confirmDelete"
+								type="button"
+							>
+								<span class="button-icon">
+									<Icons name="trash" />
+								</span>
+								删除
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</Transition>
 	</div>
 </template>

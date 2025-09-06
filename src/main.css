@@ -405,13 +405,10 @@ section {
     padding: var(--spacing-2xl) var(--spacing-xl);
   }
   
-  .create-todo {
-    height: fit-content;
-    min-height: 400px;
-  }
-  
+  .create-todo,
   .todo-list {
     min-height: 400px;
+    height: fit-content;
   }
 }
 
@@ -1002,6 +999,10 @@ section:hover {
   text-align: center;
   padding: var(--spacing-2xl);
   border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 200px;
 }
 
 .empty-icon {
@@ -1139,6 +1140,22 @@ label:focus-visible {
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
@@ -1314,6 +1331,60 @@ label:focus-visible {
   padding: var(--spacing-lg) var(--spacing-xl) var(--spacing-2xl);
   background: var(--bg-tertiary);
   border-top: 1px solid var(--glass-border);
+}
+
+.modal-button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  font-weight: 600;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9375rem;
+}
+
+.modal-button .button-icon {
+  font-size: 0.875rem;
+}
+
+.modal-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.modal-button:active {
+  transform: translateY(0);
+}
+
+.modal-button.cancel {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--glass-border);
+}
+
+.modal-button.cancel:hover {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+}
+
+.modal-button.confirm {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  border: 1px solid #dc2626;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+.modal-button.confirm:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.4);
 }
 
 .modal-actions .btn {
