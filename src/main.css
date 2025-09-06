@@ -1201,6 +1201,25 @@ label:focus-visible {
   opacity: 0;
 }
 
+/* 退出模态框动画 */
+.modal-enter-active .logout-modal {
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal-leave-active .logout-modal {
+  transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.modal-enter-from .logout-modal {
+  transform: translateY(-30px) scale(0.85);
+  opacity: 0;
+}
+
+.modal-leave-to .logout-modal {
+  transform: translateY(20px) scale(0.9);
+  opacity: 0;
+}
+
 .delete-modal {
   background: white;
   border: 1px solid var(--border-color);
@@ -1226,6 +1245,69 @@ label:focus-visible {
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   pointer-events: none;
+}
+
+/* 退出确认模态框样式 */
+.logout-modal {
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-2xl);
+  max-width: 480px;
+  width: 100%;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 
+              0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  transform-origin: center center;
+  overflow: hidden;
+  position: relative;
+}
+
+.logout-modal::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  background: var(--glass-border-gradient);
+  border-radius: inherit;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  pointer-events: none;
+}
+
+.logout-modal .modal-header {
+  text-align: center;
+  padding: var(--spacing-2xl) var(--spacing-xl) var(--spacing-lg);
+  background: linear-gradient(135deg, 
+    rgba(59, 130, 246, 0.05) 0%, 
+    rgba(59, 130, 246, 0.02) 100%);
+  border-bottom: 1px solid rgba(59, 130, 246, 0.1);
+}
+
+.logout-modal .modal-icon {
+  margin-bottom: var(--spacing-lg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  background: rgba(59, 130, 246, 0.1);
+  border-radius: 50%;
+  position: relative;
+}
+
+.logout-modal .modal-icon::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.1));
+  z-index: -1;
+}
+
+.logout-modal .warning-icon {
+  font-size: 1.5rem;
+  color: #3b82f6;
 }
 
 .modal-header {
@@ -1456,7 +1538,8 @@ label:focus-visible {
 
 /* Mobile Responsive */
 @media (max-width: 640px) {
-  .delete-modal {
+  .delete-modal,
+  .logout-modal {
     margin: 20px;
     max-width: none;
   }
