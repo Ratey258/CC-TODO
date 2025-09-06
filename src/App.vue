@@ -227,6 +227,13 @@ const removeTodo = (todo) => {
 	todos.value = todos.value.filter((t) => t !== todo)
 }
 
+// 自动调整文本框高度
+const autoResize = (event) => {
+	const textarea = event.target
+	textarea.style.height = 'auto'
+	textarea.style.height = textarea.scrollHeight + 'px'
+}
+
 // 统计数据
 const totalTodos = computed(() => todos.value.length)
 const completedTodos = computed(() => todos.value.filter(todo => todo.done).length)
@@ -436,12 +443,13 @@ onMounted(() => {
 							</label>
 
 							<div class="todo-content">
-								<input 
-									type="text" 
+								<textarea 
 									v-model="todo.content" 
 									class="todo-text"
 									maxlength="100"
-								/>
+									@input="autoResize"
+									rows="1"
+								></textarea>
 								<div class="todo-category">
 											<span class="category-badge" :class="todo.category">
 												<span class="badge-icon">
