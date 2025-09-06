@@ -12,10 +12,12 @@
   --success-gradient: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
   --danger-gradient: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
   
-  /* Glassmorphism */
+  /* Glassmorphism - Enhanced with gradients */
   --glass-bg: rgba(255, 255, 255, 0.25);
-  --glass-border: rgba(255, 255, 255, 0.18);
+  --glass-border: rgba(148, 163, 184, 0.25);
+  --glass-border-gradient: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(148, 163, 184, 0.2) 100%);
   --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  --glass-shadow-hover: 0 16px 48px 0 rgba(31, 38, 135, 0.25);
   --glass-blur: blur(4px);
   
   /* Neumorphism */
@@ -34,11 +36,13 @@
   --spacing-xl: 2rem;
   --spacing-2xl: 3rem;
   
-  /* Border Radius */
-  --radius-sm: 8px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
-  --radius-xl: 32px;
+  /* Border Radius - Enhanced Modern Hierarchy */
+  --radius-xs: 6px;
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 28px;
+  --radius-xl: 36px;
+  --radius-2xl: 44px;
   
   /* Transitions */
   --transition-fast: 0.15s ease-out;
@@ -51,7 +55,7 @@
   --text-primary: #1e293b;
   --text-secondary: #64748b;
   --text-muted: #94a3b8;
-  --border-color: rgba(148, 163, 184, 0.2);
+  --border-color: rgba(148, 163, 184, 0.3);
   --orb-color-1: rgba(102, 126, 234, 0.4);
   --orb-color-2: rgba(240, 147, 251, 0.4);
   --orb-color-3: rgba(67, 233, 123, 0.4);
@@ -61,7 +65,9 @@
 [data-theme="dark"] {
   --glass-bg: rgba(15, 23, 42, 0.25);
   --glass-border: rgba(148, 163, 184, 0.18);
+  --glass-border-gradient: linear-gradient(135deg, rgba(148, 163, 184, 0.3) 0%, rgba(71, 85, 105, 0.2) 100%);
   --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  --glass-shadow-hover: 0 16px 48px 0 rgba(0, 0, 0, 0.4);
   
   --neu-shadow-light: 20px 20px 60px #0f172a, -20px -20px 60px #334155;
   --neu-shadow-inset: inset 20px 20px 60px #0f172a, inset -20px -20px 60px #334155;
@@ -158,13 +164,34 @@ body {
   66% { transform: translateY(10px) rotate(240deg); }
 }
 
-/* Glassmorphism Effect */
+/* Enhanced Glassmorphism Effect */
 .glass {
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--glass-shadow);
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  box-shadow: var(--glass-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  position: relative;
+}
+
+.glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  background: var(--glass-border-gradient);
+  border-radius: inherit;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  pointer-events: none;
+}
+
+.glass:hover {
+  box-shadow: var(--glass-shadow-hover), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
 }
 
 /* Navigation Bar */
@@ -174,7 +201,7 @@ body {
   z-index: 100;
   padding: var(--spacing-md) var(--spacing-xl);
   margin-bottom: var(--spacing-xl);
-  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  border-radius: 0 0 var(--radius-xl) var(--radius-xl);
 }
 
 .nav-content {
@@ -208,12 +235,28 @@ body {
 
 .theme-toggle {
   background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
   padding: var(--spacing-sm) var(--spacing-md);
   cursor: pointer;
   transition: all var(--transition-normal);
   backdrop-filter: var(--glass-blur);
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-toggle::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  background: var(--glass-border-gradient);
+  border-radius: inherit;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  pointer-events: none;
 }
 
 .theme-toggle:hover {
@@ -427,7 +470,7 @@ section:hover {
 .name-input {
   background: transparent;
   border: none;
-  border-bottom: 2px solid var(--border-color);
+  border-bottom: 2px solid var(--text-muted);
   padding: var(--spacing-xs) var(--spacing-sm);
   font-size: inherit;
   font-weight: inherit;
@@ -482,8 +525,8 @@ section:hover {
 
 .stat-card {
   background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  border-radius: var(--radius-xl);
   padding: var(--spacing-lg);
   text-align: center;
   backdrop-filter: var(--glass-blur);
@@ -492,8 +535,27 @@ section:hover {
   overflow: hidden;
 }
 
+.stat-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  background: var(--glass-border-gradient);
+  border-radius: inherit;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  pointer-events: none;
+}
+
 .stat-card:hover {
   transform: translateY(-4px);
+  box-shadow: var(--glass-shadow-hover);
+}
+
+.stat-card:hover::before {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(148, 163, 184, 0.3) 100%);
 }
 
 .stat-number {
@@ -561,19 +623,38 @@ section:hover {
 
 .form-input {
   background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
   padding: var(--spacing-md) var(--spacing-lg);
   font-size: 1rem;
   color: var(--text-primary);
   backdrop-filter: var(--glass-blur);
   transition: all var(--transition-normal);
+  position: relative;
+}
+
+.form-input::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  background: var(--glass-border-gradient);
+  border-radius: inherit;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  pointer-events: none;
 }
 
 .form-input:focus {
   outline: none;
-  border-color: var(--text-primary);
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1), var(--glass-shadow-hover);
+  transform: translateY(-1px);
+}
+
+.form-input:focus::before {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.6) 0%, rgba(118, 75, 162, 0.4) 100%);
 }
 
 .form-input::placeholder {
@@ -589,8 +670,8 @@ section:hover {
 
 .category-option {
   background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  border-radius: var(--radius-xl);
   padding: var(--spacing-lg);
   cursor: pointer;
   transition: all var(--transition-normal);
@@ -599,9 +680,28 @@ section:hover {
   overflow: hidden;
 }
 
+.category-option::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  background: var(--glass-border-gradient);
+  border-radius: inherit;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  pointer-events: none;
+  z-index: 0;
+}
+
 .category-option:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--glass-shadow);
+  transform: translateY(-3px);
+  box-shadow: var(--glass-shadow-hover);
+}
+
+.category-option:hover::before {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, rgba(148, 163, 184, 0.3) 100%);
 }
 
 .category-option.active {
@@ -652,7 +752,7 @@ section:hover {
 .add-button {
   background: var(--primary-gradient);
   border: none;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-xl);
   padding: var(--spacing-md) var(--spacing-xl);
   color: white;
   font-weight: 600;
@@ -665,11 +765,25 @@ section:hover {
   transition: all var(--transition-normal);
   position: relative;
   overflow: hidden;
+  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+}
+
+.add-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%);
+  border-radius: inherit;
+  pointer-events: none;
 }
 
 .add-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 32px rgba(102, 126, 234, 0.4), 0 4px 16px rgba(102, 126, 234, 0.2);
+}
+
+.add-button:hover:not(:disabled)::before {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.1) 100%);
 }
 
 .add-button:disabled {
@@ -695,10 +809,27 @@ section:hover {
   align-items: flex-start;
   gap: var(--spacing-md);
   padding: var(--spacing-lg);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-xl);
   transition: all var(--transition-normal);
   position: relative;
   overflow: hidden;
+  background: var(--glass-bg);
+  border: 1px solid transparent;
+  backdrop-filter: var(--glass-blur);
+}
+
+.todo-item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  background: var(--glass-border-gradient);
+  border-radius: inherit;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  pointer-events: none;
 }
 
 /* Desktop Todo Item Optimization */
@@ -710,7 +841,12 @@ section:hover {
 }
 
 .todo-item:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: var(--glass-shadow-hover);
+}
+
+.todo-item:hover::before {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(148, 163, 184, 0.2) 100%);
 }
 
 .todo-item.completed {
@@ -737,12 +873,14 @@ section:hover {
   width: 24px;
   height: 24px;
   border: 2px solid var(--border-color);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all var(--transition-normal);
   background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  position: relative;
 }
 
 .todo-checkbox:hover .checkmark {
@@ -820,12 +958,27 @@ section:hover {
 
 .action-button {
   background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
   padding: var(--spacing-sm);
   cursor: pointer;
   transition: all var(--transition-normal);
   backdrop-filter: var(--glass-blur);
+  position: relative;
+}
+
+.action-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  background: var(--glass-border-gradient);
+  border-radius: inherit;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  pointer-events: none;
 }
 
 .action-button:hover {
@@ -1017,8 +1170,8 @@ label:focus-visible {
 
 .delete-modal {
   background: var(--bg-secondary);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-xl);
+  border: 1px solid transparent;
+  border-radius: var(--radius-2xl);
   max-width: 480px;
   width: 100%;
   box-shadow: 
@@ -1026,6 +1179,21 @@ label:focus-visible {
     0 0 0 1px rgba(255, 255, 255, 0.05);
   overflow: hidden;
   position: relative;
+  backdrop-filter: var(--glass-blur);
+}
+
+.delete-modal::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  background: var(--glass-border-gradient);
+  border-radius: inherit;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  pointer-events: none;
 }
 
 .modal-header {
@@ -1077,10 +1245,26 @@ label:focus-visible {
 
 .task-preview {
   background: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-lg);
+  border: 1px solid transparent;
+  border-radius: var(--radius-2xl);
   padding: var(--spacing-lg);
   margin-bottom: var(--spacing-lg);
+  backdrop-filter: var(--glass-blur);
+  position: relative;
+}
+
+.task-preview::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  background: var(--glass-border-gradient);
+  border-radius: inherit;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: xor;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  pointer-events: none;
 }
 
 .task-info {
