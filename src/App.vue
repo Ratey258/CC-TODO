@@ -91,8 +91,8 @@ onMounted(() => {
 		<nav class="navbar glass">
 			<div class="nav-content">
 				<h1 class="app-title">
-					<span class="icon">✨</span>
-					TodoZen 2025
+					<span class="icon">📝</span>
+					CC-TODO
 				</h1>
 				<button class="theme-toggle" @click="toggleTheme" :class="{ active: isDarkMode }">
 					<span class="theme-icon">{{ isDarkMode ? '☀️' : '🌙' }}</span>
@@ -105,11 +105,11 @@ onMounted(() => {
 			<section class="greeting glass">
 				<div class="greeting-content">
 					<h2 class="greeting-title">
-						<span class="greeting-text">Hello there,</span>
+						<span class="greeting-text">你好，</span>
 						<input 
 							type="text" 
 							class="name-input" 
-							placeholder="Your name" 
+							placeholder="请输入姓名" 
 							v-model="name"
 							maxlength="20"
 						>
@@ -120,15 +120,15 @@ onMounted(() => {
 					<div class="stats-grid" v-if="totalTodos > 0">
 						<div class="stat-card">
 							<div class="stat-number">{{ totalTodos }}</div>
-							<div class="stat-label">Total Tasks</div>
+							<div class="stat-label">总任务</div>
 						</div>
 						<div class="stat-card">
 							<div class="stat-number">{{ completedTodos }}</div>
-							<div class="stat-label">Completed</div>
+							<div class="stat-label">已完成</div>
 						</div>
 						<div class="stat-card">
 							<div class="stat-number">{{ progressPercentage }}%</div>
-							<div class="stat-label">Progress</div>
+							<div class="stat-label">进度</div>
 							<div class="progress-bar">
 								<div class="progress-fill" :style="{ width: progressPercentage + '%' }"></div>
 							</div>
@@ -142,24 +142,24 @@ onMounted(() => {
 				<div class="section-header">
 					<h3 class="section-title">
 						<span class="section-icon">➕</span>
-						Create New Task
+						创建新任务
 					</h3>
 				</div>
 				
 				<form @submit.prevent="addTodo" class="todo-form">
 					<div class="form-group">
-						<label class="form-label">What's on your mind?</label>
+						<label class="form-label">你在想什么？</label>
 						<input 
 							type="text" 
 							class="form-input"
-							placeholder="e.g. Learn Vue.js, Go for a run..."
+							placeholder="例如：学习Vue.js，去跑步..."
 							v-model="input_content"
 							maxlength="100"
 						/>
 					</div>
 					
 					<div class="form-group">
-						<label class="form-label">Choose a category</label>
+						<label class="form-label">选择分类</label>
 						<div class="category-options">
 							<label class="category-option" :class="{ active: input_category === 'business' }">
 								<input 
@@ -170,7 +170,7 @@ onMounted(() => {
 								/>
 								<div class="category-content">
 									<span class="category-icon">💼</span>
-									<span class="category-name">Business</span>
+									<span class="category-name">工作</span>
 								</div>
 								<div class="category-indicator business"></div>
 							</label>
@@ -184,7 +184,7 @@ onMounted(() => {
 								/>
 								<div class="category-content">
 									<span class="category-icon">🎯</span>
-									<span class="category-name">Personal</span>
+									<span class="category-name">个人</span>
 								</div>
 								<div class="category-indicator personal"></div>
 							</label>
@@ -193,7 +193,7 @@ onMounted(() => {
 					
 					<button type="submit" class="add-button" :disabled="!input_content.trim() || !input_category">
 						<span class="button-icon">✨</span>
-						Add Task
+						添加任务
 					</button>
 				</form>
 			</section>
@@ -203,7 +203,7 @@ onMounted(() => {
 				<div class="section-header" v-if="todos.length > 0">
 					<h3 class="section-title">
 						<span class="section-icon">📋</span>
-						Your Tasks
+						我的任务
 					</h3>
 				</div>
 
@@ -234,18 +234,18 @@ onMounted(() => {
 									maxlength="100"
 								/>
 								<div class="todo-category">
-									<span class="category-badge" :class="todo.category">
-										{{ todo.category === 'business' ? '💼 Business' : '🎯 Personal' }}
-									</span>
+											<span class="category-badge" :class="todo.category">
+												{{ todo.category === 'business' ? '💼 工作' : '🎯 个人' }}
+											</span>
 								</div>
 							</div>
 
 							<div class="todo-actions">
-								<button 
-									class="action-button delete" 
-									@click="removeTodo(todo)"
-									title="Delete task"
-								>
+									<button 
+										class="action-button delete" 
+										@click="removeTodo(todo)"
+										title="删除任务"
+									>
 									<span class="action-icon">🗑️</span>
 								</button>
 							</div>
@@ -256,8 +256,8 @@ onMounted(() => {
 				<!-- 空状态 -->
 				<div class="empty-state glass" v-else>
 					<div class="empty-icon">🎉</div>
-					<h3 class="empty-title">All caught up!</h3>
-					<p class="empty-text">You have no tasks yet. Create one above to get started.</p>
+					<h3 class="empty-title">全部完成！</h3>
+					<p class="empty-text">您暂时没有任务。在上方创建一个任务开始吧。</p>
 				</div>
 			</section>
 		</main>
