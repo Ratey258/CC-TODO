@@ -37,6 +37,7 @@ jobs:
       run: npm run build
       env:
         NODE_ENV: production
+        BASE_URL: /CC-TODO/
         
     - name: Setup Pages
       uses: actions/configure-pages@v5
