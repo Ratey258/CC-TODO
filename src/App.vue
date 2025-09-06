@@ -11,20 +11,32 @@ const isDarkMode = ref(false)
 const showDeleteModal = ref(false)
 const todoToDelete = ref(null)
 
+// 用户相关状态
+const currentUser = ref(null)
+const showLoginModal = ref(false)
+const loginForm = ref({
+	username: ''
+})
+const loginError = ref('')
+
 // 监听主题变化
 watch(isDarkMode, (newVal) => {
 	localStorage.setItem('darkMode', JSON.stringify(newVal))
 	document.documentElement.setAttribute('data-theme', newVal ? 'dark' : 'light')
 })
 
-// 监听name的变化，保存到localStorage
+// 监听name的变化，保存到用户数据
 watch(name, (newVal) => {
-	localStorage.setItem('name', newVal)
+	if (currentUser.value) {
+		saveUserData()
+	}
 })
 
-// 监听todos的变化，保存到localStorage
+// 监听todos的变化，保存到用户数据
 watch(todos, (newVal) => {
-	localStorage.setItem('todos', JSON.stringify(newVal))
+	if (currentUser.value) {
+		saveUserData()
+	}
 }, {
 	deep: true
 })
@@ -32,6 +44,88 @@ watch(todos, (newVal) => {
 // 切换主题
 const toggleTheme = () => {
 	isDarkMode.value = !isDarkMode.value
+}
+
+// 用户管理函数
+const getUsers = () => {
+	return JSON.parse(localStorage.getItem('users')) || {}
+}
+
+const saveUserData = () => {
+	if (!currentUser.value) return
+	
+	const users = getUsers()
+	users[currentUser.value.username] = {
+		...currentUser.value,
+		name: name.value,
+		todos: todos.value,
+		lastLogin: new Date().getTime()
+	}
+	localStorage.setItem('users', JSON.stringify(users))
+}
+
+const loadUserData = (username) => {
+	const users = getUsers()
+	const userData = users[username]
+	if (userData) {
+		name.value = userData.name || ''
+		todos.value = userData.todos || []
+	}
+}
+
+const login = () => {
+	loginError.value = ''
+	const { username } = loginForm.value
+	
+	if (!username.trim()) {
+		loginError.value = '请输入用户名'
+		return
+	}
+	
+	const users = getUsers()
+	
+	// 如果用户不存在，自动创建新用户
+	if (!users[username]) {
+		users[username] = {
+			username: username,
+			name: '',
+			todos: [],
+			createdAt: new Date().getTime(),
+			lastLogin: new Date().getTime()
+		}
+		localStorage.setItem('users', JSON.stringify(users))
+	}
+	
+	// 登录用户
+	currentUser.value = users[username]
+	localStorage.setItem('currentUser', username)
+	loadUserData(username)
+	resetLoginForm()
+	showLoginModal.value = false
+}
+
+const logout = () => {
+	if (currentUser.value) {
+		saveUserData() // 保存当前数据
+	}
+	currentUser.value = null
+	name.value = ''
+	todos.value = []
+	localStorage.removeItem('currentUser')
+	showLoginModal.value = true
+}
+
+const resetLoginForm = () => {
+	loginForm.value = {
+		username: ''
+	}
+	loginError.value = ''
+}
+
+
+const showLogin = () => {
+	resetLoginForm()
+	showLoginModal.value = true
 }
 
 // 添加新待办事项的函数
@@ -93,10 +187,26 @@ const progressPercentage = computed(() => {
 
 // 组件加载时从localStorage加载数据
 onMounted(() => {
-	name.value = localStorage.getItem('name') || ''
-	todos.value = JSON.parse(localStorage.getItem('todos')) || []
+	// 加载主题设置
 	isDarkMode.value = JSON.parse(localStorage.getItem('darkMode')) || false
 	document.documentElement.setAttribute('data-theme', isDarkMode.value ? 'dark' : 'light')
+	
+	// 尝试恢复用户登录状态
+	const lastUser = localStorage.getItem('currentUser')
+	if (lastUser) {
+		const users = getUsers()
+		if (users[lastUser]) {
+			currentUser.value = users[lastUser]
+			loadUserData(lastUser)
+		} else {
+			// 用户数据不存在，清除状态
+			localStorage.removeItem('currentUser')
+			showLoginModal.value = true
+		}
+	} else {
+		// 没有登录用户，显示登录模态框
+		showLoginModal.value = true
+	}
 })
 
 </script>
@@ -119,11 +229,24 @@ onMounted(() => {
 					</span>
 					CC-TODO
 				</h1>
-				<button class="theme-toggle" @click="toggleTheme" :class="{ active: isDarkMode }">
-					<span class="theme-icon">
-						<Icons :name="isDarkMode ? 'sun' : 'moon'" />
-					</span>
-				</button>
+				<div class="nav-actions">
+					<div class="user-info" v-if="currentUser">
+						<span class="user-avatar">
+							<Icons name="user" />
+						</span>
+						<span class="username">{{ currentUser.username }}</span>
+					</div>
+					<button class="theme-toggle" @click="toggleTheme" :class="{ active: isDarkMode }">
+						<span class="theme-icon">
+							<Icons :name="isDarkMode ? 'sun' : 'moon'" />
+						</span>
+					</button>
+					<button class="logout-button" @click="logout" v-if="currentUser" title="退出登录">
+						<span class="logout-icon">
+							<Icons name="log-out" />
+						</span>
+					</button>
+				</div>
 			</div>
 		</nav>
 
@@ -346,6 +469,65 @@ onMounted(() => {
 								删除
 							</button>
 						</div>
+					</div>
+				</div>
+			</div>
+		</Transition>
+
+		<!-- 登录模态框 -->
+		<Transition name="modal">
+			<div v-if="showLoginModal" class="modal-overlay">
+				<div class="login-modal" @click.stop>
+					<div class="modal-header">
+						<div class="modal-icon">
+							<span class="login-icon">
+								<Icons name="user" />
+							</span>
+						</div>
+						<h3 class="modal-title">欢迎使用 CC-TODO</h3>
+						<p class="modal-subtitle">请输入您的用户名开始使用</p>
+					</div>
+					
+					<div class="modal-content">
+						<form @submit.prevent="login" class="login-form">
+							<div class="form-group">
+								<label for="username" class="form-label">用户名</label>
+								<div class="input-wrapper">
+									<span class="input-icon">
+										<Icons name="user" />
+									</span>
+									<input
+										id="username"
+										v-model="loginForm.username"
+										type="text"
+										class="form-input"
+										placeholder="请输入用户名"
+										autocomplete="username"
+										required
+									>
+								</div>
+							</div>
+							
+							<div v-if="loginError" class="error-message">
+								<span class="error-icon">
+									<Icons name="alert-circle" />
+								</span>
+								{{ loginError }}
+							</div>
+							
+							<div class="form-actions">
+								<button 
+									type="submit"
+									class="login-button"
+									:disabled="!loginForm.username.trim()"
+								>
+									<span class="button-icon">
+										<Icons name="log-in" />
+									</span>
+									开始使用
+								</button>
+							</div>
+						</form>
 					</div>
 				</div>
 			</div>
