@@ -20,6 +20,9 @@ const loginForm = ref({
 })
 const loginError = ref('')
 
+// 页面加载状态
+const isPageLoaded = ref(false)
+
 // 监听主题变化
 watch(isDarkMode, (newVal) => {
 	localStorage.setItem('darkMode', JSON.stringify(newVal))
@@ -178,23 +181,39 @@ const showLogin = () => {
 	showLoginModal.value = true
 }
 
+// 响应式数据 - 添加动画状态
+const isAddingTodo = ref(false)
+const showSuccessAnimation = ref(false)
+
 // 添加新待办事项的函数
-const addTodo = () => {
+const addTodo = async () => {
 	if (input_content.value.trim() === '' || input_category.value === null) {
 		return
 	}
 	
-	todos.value.push({
-		content: input_content.value,
-		category: input_category.value,
-		done: false,
-		editable: false,
-		createdAt: new Date().getTime()
-	})
+	isAddingTodo.value = true
 	
-	// 清空输入字段
-	input_content.value = ''
-	input_category.value = null
+	// 模拟短暂延迟以显示加载状态
+	setTimeout(() => {
+		todos.value.push({
+			content: input_content.value,
+			category: input_category.value,
+			done: false,
+			editable: false,
+			createdAt: new Date().getTime()
+		})
+		
+		// 显示成功动画
+		showSuccessAnimation.value = true
+		setTimeout(() => {
+			showSuccessAnimation.value = false
+		}, 1000)
+		
+		// 清空输入字段
+		input_content.value = ''
+		input_category.value = null
+		isAddingTodo.value = false
+	}, 300)
 }
 
 // 按创建时间升序排列待办事项
@@ -234,6 +253,11 @@ const autoResize = (event) => {
 	textarea.style.height = textarea.scrollHeight + 'px'
 }
 
+// 处理TODO完成状态变化
+const toggleTodoComplete = (todo) => {
+	todo.done = !todo.done
+}
+
 // 统计数据
 const totalTodos = computed(() => todos.value.length)
 const completedTodos = computed(() => todos.value.filter(todo => todo.done).length)
@@ -242,8 +266,16 @@ const progressPercentage = computed(() => {
 	return Math.round((completedTodos.value / totalTodos.value) * 100)
 })
 
+// 是否全部完成
+const isAllCompleted = computed(() => {
+	return totalTodos.value > 0 && progressPercentage.value === 100
+})
+
 // 组件加载时从localStorage加载数据
-onMounted(() => {
+onMounted(async () => {
+	// 模拟加载延迟以显示漂亮的进入动画
+	await new Promise(resolve => setTimeout(resolve, 500))
+	
 	// 加载主题设置
 	isDarkMode.value = JSON.parse(localStorage.getItem('darkMode')) || false
 	document.documentElement.setAttribute('data-theme', isDarkMode.value ? 'dark' : 'light')
@@ -264,12 +296,32 @@ onMounted(() => {
 		// 没有登录用户，显示登录模态框
 		showLoginModal.value = true
 	}
+	
+	// 页面加载完成
+	isPageLoaded.value = true
 })
 
 </script>
 
 <template>
-	<div class="app">
+	<div class="app" :class="{ 'page-loaded': isPageLoaded }">
+		<!-- 页面加载器 -->
+		<Transition name="page-loader">
+			<div v-if="!isPageLoaded" class="page-loader">
+				<div class="loader-content">
+					<div class="loader-icon">
+						<Icons name="app" />
+					</div>
+					<h2 class="loader-title">CC-TODO</h2>
+					<div class="loader-spinner">
+						<div class="spinner-ring"></div>
+						<div class="spinner-ring"></div>
+						<div class="spinner-ring"></div>
+					</div>
+				</div>
+			</div>
+		</Transition>
+
 		<!-- 背景装饰 -->
 		<div class="bg-decoration">
 			<div class="gradient-orb orb-1"></div>
@@ -317,7 +369,9 @@ onMounted(() => {
 							<span class="user-name">{{ currentUser?.username || '用户' }}</span>
 							<span class="wave">👋</span>
 						</h2>
-						<p class="welcome-message">{{ getWelcomeMessage() }}</p>
+						<p class="welcome-message">
+							{{ getWelcomeMessage() }}
+						</p>
 					</div>
 					
 					<!-- 进度统计 -->
@@ -401,11 +455,16 @@ onMounted(() => {
 						</div>
 					</div>
 					
-					<button type="submit" class="add-button" :disabled="!input_content.trim() || !input_category">
-						<span class="button-icon">
-							<Icons name="star" />
+					<button 
+						type="submit" 
+						class="add-button" 
+						:class="{ 'loading': isAddingTodo, 'success': showSuccessAnimation }"
+						:disabled="!input_content.trim() || !input_category || isAddingTodo"
+					>
+						<span class="button-icon" :class="{ 'spinning': isAddingTodo }">
+							<Icons :name="isAddingTodo ? 'star' : showSuccessAnimation ? 'check' : 'star'" />
 						</span>
-						添加待办事项
+						{{ isAddingTodo ? '添加中...' : showSuccessAnimation ? '添加成功！' : '添加待办事项' }}
 					</button>
 				</form>
 			</section>
@@ -434,7 +493,7 @@ onMounted(() => {
 							}"
 						>
 							<label class="todo-checkbox">
-								<input type="checkbox" v-model="todo.done" />
+								<input type="checkbox" :checked="todo.done" @change="toggleTodoComplete(todo)" />
 								<span class="checkmark">
 									<span class="check-icon">
 										<Icons name="check" />
