@@ -1236,33 +1236,61 @@ section:hover {
     font-weight: 600;
   }
   
+  /* 头部导航区域优化 */
+  .app-header {
+    padding: var(--spacing-md) var(--spacing-md) var(--spacing-sm);
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  /* 欢迎区域优化 */
+  .greeting-section {
+    padding: var(--spacing-lg) var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+  }
+  
   .greeting-title {
     font-size: 1.4rem;
     line-height: 1.3;
     font-weight: 600;
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .greeting-subtitle {
+    margin-bottom: var(--spacing-lg);
   }
   
   .main-content {
-    padding: 0 var(--spacing-sm);
-    gap: var(--spacing-sm);
+    padding: 0 var(--spacing-md);
+    gap: var(--spacing-lg);
   }
   
   section {
-    padding: var(--spacing-sm);
-    border-radius: var(--radius-md);
+    padding: var(--spacing-lg) var(--spacing-md);
+    border-radius: var(--radius-xl);
+    margin-bottom: var(--spacing-md);
   }
   
   .section-title {
     font-size: 1.1rem;
     font-weight: 600;
+    margin-bottom: var(--spacing-lg);
   }
   
-  /* 待办事项优化 */
+  /* 待办事项列表优化 */
+  .todo-list {
+    gap: var(--spacing-md);
+  }
+  
   .todo-item {
-    padding: var(--spacing-sm);
-    margin-bottom: var(--spacing-xs);
-    min-height: 60px;
-    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-sm);
+    min-height: 68px;
+    border-radius: var(--radius-xl);
+    gap: var(--spacing-md);
+  }
+  
+  .todo-content {
+    gap: var(--spacing-sm);
   }
   
   .todo-text {
@@ -1270,10 +1298,12 @@ section:hover {
     line-height: 1.4;
     font-weight: 400;
     color: var(--text-primary);
+    padding: var(--spacing-xs) 0;
   }
   
   .todo-checkbox {
-    margin-right: var(--spacing-sm);
+    margin-right: var(--spacing-md);
+    transform: scale(1.1);
   }
   
   /* 按钮优化 */
@@ -1289,18 +1319,29 @@ section:hover {
   }
   
   /* 表单优化 */
+  .form-group {
+    margin-bottom: var(--spacing-lg);
+  }
+  
   .form-input {
     padding: var(--spacing-md);
     font-size: 1rem;
     line-height: 1.4;
-    min-height: 50px;
+    min-height: 52px;
+    border-radius: var(--radius-xl);
+  }
+  
+  .category-options {
+    margin-top: var(--spacing-md);
+    gap: var(--spacing-md);
   }
   
   .category-option {
-    padding: var(--spacing-sm) var(--spacing-md);
+    padding: var(--spacing-md);
     font-size: 1rem;
-    min-height: 48px;
-    border-radius: var(--radius-lg);
+    min-height: 52px;
+    border-radius: var(--radius-xl);
+    gap: var(--spacing-sm);
   }
   
   .category-badge {
@@ -1318,33 +1359,46 @@ section:hover {
   /* 统计卡片优化 */
   .stats-grid {
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--spacing-xs);
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-md);
   }
   
   .stat-card {
-    padding: var(--spacing-md);
-    min-height: 80px;
+    padding: var(--spacing-lg) var(--spacing-md);
+    min-height: 85px;
     border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
   }
   
   .stat-number {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     font-weight: 700;
+    line-height: 1.2;
   }
   
   .stat-label {
     font-size: 0.8rem;
     font-weight: 500;
     margin-top: var(--spacing-xs);
+    opacity: 0.8;
   }
   
   /* 提交按钮优化 */
   .submit-btn {
-    min-height: 52px;
-    padding: var(--spacing-md) var(--spacing-xl);
+    min-height: 56px;
+    padding: var(--spacing-lg) var(--spacing-xl);
     font-size: 1.1rem;
     font-weight: 600;
     border-radius: var(--radius-xl);
+    margin-top: var(--spacing-lg);
+  }
+  
+  .form-actions {
+    margin-top: var(--spacing-xl);
   }
   
   /* 用户名输入优化 */
