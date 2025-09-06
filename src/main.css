@@ -2187,63 +2187,163 @@ label:focus-visible {
   box-shadow: 0 4px 16px rgba(239, 68, 68, 0.4);
 }
 
-/* Mobile Responsive */
-@media (max-width: 640px) {
+/* 通用移动端优化*/
+@media (max-width: 768px) {
+  /* 模态框背景优化 - 使用视口单位和现代布局 */
+  .modal-overlay {
+    padding: clamp(16px, 4vw, 24px);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    min-height: 100dvh; /* 动态视口高度，更好的移动端支持 */
+  }
+  
+  /* 通用模态框 */
   .delete-modal,
   .logout-modal {
-    margin: 20px;
+    width: clamp(280px, 88vw, 420px);
     max-width: none;
+    margin: 0;
+    max-height: calc(100vh - 60px);
+    max-height: calc(100dvh - 60px);
+    overflow-y: auto;
+  }
+  
+  /* 登录模态框特殊优化 */
+  .login-modal {
+    width: clamp(280px, 82vw, 380px);
+    max-width: none;
+    margin: 0;
+    max-height: calc(100vh - 60px);
+    max-height: calc(100dvh - 60px);
+    overflow-y: auto;
+    /* 确保内容不会被截断 */
+    min-height: auto;
   }
   
   .modal-header {
-    padding: var(--spacing-xl) var(--spacing-lg) var(--spacing-md);
+    padding: clamp(12px, 3vw, 24px) clamp(16px, 4vw, 24px) clamp(8px, 2vw, 16px);
   }
   
   .modal-content {
-    padding: var(--spacing-md) var(--spacing-lg);
+    padding: clamp(12px, 3vw, 20px) clamp(16px, 4vw, 24px) clamp(20px, 5vw, 32px);
   }
   
   .modal-actions {
-    padding: var(--spacing-md) var(--spacing-lg) var(--spacing-xl);
+    padding: clamp(12px, 3vw, 20px) clamp(16px, 4vw, 24px) clamp(20px, 5vw, 32px);
     flex-direction: column;
   }
   
   .modal-title {
-    font-size: 1.25rem;
-  }
-
-  /* 登录模态框移动端样式 */
-  .login-modal {
-    margin: 20px;
-    max-width: none;
-    width: calc(100% - 40px);
+    font-size: clamp(1.125rem, 4.5vw, 1.5rem);
+    line-height: 1.3;
   }
   
-  .login-modal .modal-header {
-    padding: var(--spacing-xl) var(--spacing-lg) var(--spacing-md);
-  }
-  
-  .login-modal .modal-content {
-    padding: var(--spacing-md) var(--spacing-lg) var(--spacing-xl);
+  .modal-subtitle {
+    font-size: clamp(0.8rem, 3.5vw, 0.9375rem);
+    line-height: 1.4;
   }
   
   .login-modal .modal-icon {
-    width: 64px;
-    height: 64px;
-    margin-bottom: var(--spacing-md);
+    width: clamp(48px, 12vw, 72px);
+    height: clamp(48px, 12vw, 72px);
+    margin-bottom: clamp(8px, 2vw, 16px);
   }
   
-  .login-modal .modal-title {
-    font-size: 1.25rem;
+  .login-icon {
+    width: clamp(20px, 6vw, 32px);
+    height: clamp(20px, 6vw, 32px);
+  }
+  
+  /* 表单元素优化 */
+  .form-group {
+    margin-bottom: clamp(16px, 4vw, 24px);
+  }
+  
+  .form-label {
+    font-size: clamp(0.8125rem, 3.5vw, 0.9375rem);
+    margin-bottom: clamp(4px, 1vw, 8px);
   }
   
   .form-input {
-    padding: var(--spacing-sm) var(--spacing-sm) var(--spacing-sm) 42px;
+    padding: clamp(8px, 2.5vw, 12px) clamp(8px, 2.5vw, 12px) clamp(8px, 2.5vw, 12px) clamp(32px, 8vw, 44px);
+    font-size: clamp(0.8125rem, 4vw, 1rem);
+    min-height: 44px; /* 确保触摸友好 */
+    line-height: 1.4;
   }
   
   .input-icon {
-    width: 16px;
-    height: 16px;
+    left: clamp(8px, 2.5vw, 12px);
+    width: clamp(14px, 4vw, 18px);
+    height: clamp(14px, 4vw, 18px);
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .login-button {
+    padding: clamp(12px, 3vw, 16px) clamp(16px, 4vw, 24px);
+    font-size: clamp(0.875rem, 4vw, 1rem);
+    min-height: 48px; /* 确保触摸友好 */
+    line-height: 1.4;
+  }
+  
+  .button-icon {
+    width: clamp(16px, 4vw, 20px);
+    height: clamp(16px, 4vw, 20px);
+  }
+}
+
+/* 超小屏幕专门优化 */
+@media (max-width: 480px) {
+  .modal-overlay {
+    padding: clamp(20px, 5vw, 32px);
+  }
+  
+  .login-modal {
+    width: clamp(260px, 78vw, 340px);
+    max-height: calc(100vh - 80px);
+    max-height: calc(100dvh - 80px);
+  }
+}
+
+/* 更小屏幕的额外优化 */
+@media (max-width: 360px) {
+  .modal-overlay {
+    padding: clamp(24px, 6vw, 36px);
+  }
+  
+  .login-modal {
+    width: clamp(240px, 75vw, 320px);
+  }
+}
+
+/* 特殊处理横屏模式 */
+@media (max-width: 768px) and (orientation: landscape) and (max-height: 500px) {
+  .modal-overlay {
+    padding: clamp(12px, 2vw, 16px);
+    align-items: flex-start;
+    padding-top: clamp(16px, 3vw, 24px);
+  }
+  
+  .login-modal {
+    max-height: calc(100vh - 40px);
+    max-height: calc(100dvh - 40px);
+  }
+  
+  .modal-header {
+    padding: clamp(8px, 2vw, 16px) clamp(12px, 3vw, 20px) clamp(4px, 1vw, 8px);
+  }
+  
+  .modal-content {
+    padding: clamp(8px, 2vw, 16px) clamp(12px, 3vw, 20px) clamp(12px, 3vw, 20px);
+  }
+  
+  .login-modal .modal-icon {
+    width: clamp(40px, 8vw, 56px);
+    height: clamp(40px, 8vw, 56px);
+    margin-bottom: clamp(4px, 1vw, 8px);
   }
 }
 
@@ -2415,6 +2515,9 @@ label:focus-visible {
   transform-origin: center center;
   overflow: hidden;
   position: relative;
+  /* 确保模态框适应任何屏幕尺寸 */
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .login-modal::before {
