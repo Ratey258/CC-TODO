@@ -68,7 +68,3 @@ CC-TODO/
 
 - [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
 - [Vue DevTools](https://devtools.vuejs.org/) 浏览器扩展
-
-## 开源协议
-
-MIT License
