@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue'
+import Icons from './components/Icons.vue'
 
 // 响应式数据
 const todos = ref([])
@@ -91,11 +92,15 @@ onMounted(() => {
 		<nav class="navbar glass">
 			<div class="nav-content">
 				<h1 class="app-title">
-					<span class="icon">📝</span>
+					<span class="icon">
+						<Icons name="app" />
+					</span>
 					CC-TODO
 				</h1>
 				<button class="theme-toggle" @click="toggleTheme" :class="{ active: isDarkMode }">
-					<span class="theme-icon">{{ isDarkMode ? '☀️' : '🌙' }}</span>
+					<span class="theme-icon">
+						<Icons :name="isDarkMode ? 'sun' : 'moon'" />
+					</span>
 				</button>
 			</div>
 		</nav>
@@ -141,7 +146,9 @@ onMounted(() => {
 			<section class="create-todo glass">
 				<div class="section-header">
 					<h3 class="section-title">
-						<span class="section-icon">➕</span>
+						<span class="section-icon">
+							<Icons name="plus" />
+						</span>
 						创建新任务
 					</h3>
 				</div>
@@ -169,7 +176,9 @@ onMounted(() => {
 									v-model="input_category" 
 								/>
 								<div class="category-content">
-									<span class="category-icon">💼</span>
+									<span class="category-icon">
+										<Icons name="briefcase" />
+									</span>
 									<span class="category-name">工作</span>
 								</div>
 								<div class="category-indicator business"></div>
@@ -183,7 +192,9 @@ onMounted(() => {
 									v-model="input_category" 
 								/>
 								<div class="category-content">
-									<span class="category-icon">🎯</span>
+									<span class="category-icon">
+										<Icons name="target" />
+									</span>
 									<span class="category-name">个人</span>
 								</div>
 								<div class="category-indicator personal"></div>
@@ -192,7 +203,9 @@ onMounted(() => {
 					</div>
 					
 					<button type="submit" class="add-button" :disabled="!input_content.trim() || !input_category">
-						<span class="button-icon">✨</span>
+						<span class="button-icon">
+							<Icons name="star" />
+						</span>
 						添加任务
 					</button>
 				</form>
@@ -202,7 +215,9 @@ onMounted(() => {
 			<section class="todo-list">
 				<div class="section-header" v-if="todos.length > 0">
 					<h3 class="section-title">
-						<span class="section-icon">📋</span>
+						<span class="section-icon">
+							<Icons name="list" />
+						</span>
 						我的任务
 					</h3>
 				</div>
@@ -222,7 +237,9 @@ onMounted(() => {
 							<label class="todo-checkbox">
 								<input type="checkbox" v-model="todo.done" />
 								<span class="checkmark">
-									<span class="check-icon">✓</span>
+									<span class="check-icon">
+										<Icons name="check" />
+									</span>
 								</span>
 							</label>
 
@@ -235,7 +252,10 @@ onMounted(() => {
 								/>
 								<div class="todo-category">
 											<span class="category-badge" :class="todo.category">
-												{{ todo.category === 'business' ? '💼 工作' : '🎯 个人' }}
+												<span class="badge-icon">
+													<Icons :name="todo.category === 'business' ? 'briefcase' : 'target'" />
+												</span>
+												{{ todo.category === 'business' ? '工作' : '个人' }}
 											</span>
 								</div>
 							</div>
@@ -246,7 +266,9 @@ onMounted(() => {
 										@click="removeTodo(todo)"
 										title="删除任务"
 									>
-									<span class="action-icon">🗑️</span>
+									<span class="action-icon">
+										<Icons name="trash" />
+									</span>
 								</button>
 							</div>
 						</div>
@@ -255,7 +277,9 @@ onMounted(() => {
 
 				<!-- 空状态 -->
 				<div class="empty-state glass" v-else>
-					<div class="empty-icon">🎉</div>
+					<div class="empty-icon">
+						<Icons name="celebrate" />
+					</div>
 					<h3 class="empty-title">全部完成！</h3>
 					<p class="empty-text">您暂时没有任务。在上方创建一个任务开始吧。</p>
 				</div>
