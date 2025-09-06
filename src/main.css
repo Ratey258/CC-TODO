@@ -344,7 +344,7 @@ body {
 @keyframes fadeInScale {
   0% {
     opacity: 0;
-    transform: scale(0.8) translateY(20px);
+    transform: scale(0.95) translateY(10px);
   }
   100% {
     opacity: 1;
@@ -1391,12 +1391,10 @@ section:hover {
   flex-direction: column;
   justify-content: center;
   min-height: 200px;
-  animation: fadeInScale 0.8s ease-out;
+  animation: fadeInScale 0.4s ease-out;
 }
 
-.empty-state:hover {
-  animation: gentle-sway 3s ease-in-out infinite;
-}
+/* 移除悬停时的摇摆动画，避免重复触发 */
 
 .empty-icon {
   font-size: 4rem;
