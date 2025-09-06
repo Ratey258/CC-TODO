@@ -147,7 +147,7 @@ onMounted(() => {
 					<div class="stats-grid">
 						<div class="stat-card">
 							<div class="stat-number">{{ totalTodos }}</div>
-							<div class="stat-label">总任务</div>
+							<div class="stat-label">总待办事项</div>
 						</div>
 						<div class="stat-card">
 							<div class="stat-number">{{ completedTodos }}</div>
@@ -171,7 +171,7 @@ onMounted(() => {
 						<span class="section-icon">
 							<Icons name="plus" />
 						</span>
-						创建新任务
+						创建新待办事项
 					</h3>
 				</div>
 				
@@ -228,7 +228,7 @@ onMounted(() => {
 						<span class="button-icon">
 							<Icons name="star" />
 						</span>
-						添加任务
+						添加待办事项
 					</button>
 				</form>
 			</section>
@@ -240,7 +240,7 @@ onMounted(() => {
 						<span class="section-icon">
 							<Icons name="list" />
 						</span>
-						我的任务
+						我的待办事项
 					</h3>
 				</div>
 
@@ -286,7 +286,7 @@ onMounted(() => {
 									<button 
 										class="action-button delete" 
 										@click="showDeleteConfirmation(todo)"
-										title="删除任务"
+										title="删除待办事项"
 									>
 									<span class="action-icon">
 										<Icons name="trash" />
@@ -300,7 +300,7 @@ onMounted(() => {
 				<!-- 空状态 -->
 				<div class="empty-state glass" v-else>
 					<h3 class="empty-title">全部完成！</h3>
-					<p class="empty-text">您暂时没有任务。在上方创建一个任务开始吧。</p>
+					<p class="empty-text">您暂时没有待办事项。在上方创建一个待办事项开始吧。</p>
 				</div>
 			</section>
 		</main>
@@ -315,14 +315,12 @@ onMounted(() => {
 								<Icons name="alert-triangle" />
 							</span>
 						</div>
-						<h3 class="modal-title">确认删除任务</h3>
+						<h3 class="modal-title">确认删除待办事项</h3>
 					</div>
 					
 					<div class="modal-content">
 						<p class="modal-message">
-							确定要删除任务
-							<strong v-if="todoToDelete">"{{ todoToDelete.content }}"</strong>
-							吗？此操作无法撤销。
+							确定要删除这个待办事项吗？此操作无法撤销。
 						</p>
 						
 						<div class="modal-actions">
