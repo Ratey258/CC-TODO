@@ -874,6 +874,7 @@ section:hover {
 }
 
 .stat-number {
+  font-family: var(--font-heading);
   font-size: 2rem;
   font-weight: 700;
   background: var(--primary-gradient);
@@ -883,6 +884,7 @@ section:hover {
 }
 
 .stat-label {
+  font-family: var(--font-primary);
   font-size: 0.875rem;
   color: var(--text-secondary);
   margin-top: var(--spacing-xs);
@@ -1723,12 +1725,14 @@ section:hover {
   }
   
   .stat-number {
+    font-family: var(--font-heading);
     font-size: 1.6rem;
     font-weight: 700;
     line-height: 1.2;
   }
   
   .stat-label {
+    font-family: var(--font-primary);
     font-size: 0.8rem;
     font-weight: 500;
     margin-top: var(--spacing-xs);
