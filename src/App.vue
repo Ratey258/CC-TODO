@@ -122,7 +122,7 @@ onMounted(() => {
 					</h2>
 					
 					<!-- 进度统计 -->
-					<div class="stats-grid" v-if="totalTodos > 0">
+					<div class="stats-grid">
 						<div class="stat-card">
 							<div class="stat-number">{{ totalTodos }}</div>
 							<div class="stat-label">总任务</div>
