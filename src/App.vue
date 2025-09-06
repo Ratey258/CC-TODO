@@ -155,11 +155,11 @@ onMounted(() => {
 				
 				<form @submit.prevent="addTodo" class="todo-form">
 					<div class="form-group">
-						<label class="form-label">你在想什么？</label>
+						<label class="form-label">你想做什么？</label>
 						<input 
 							type="text" 
 							class="form-input"
-							placeholder="例如：学习Vue.js，去跑步..."
+							placeholder="例如：去跑步..."
 							v-model="input_content"
 							maxlength="100"
 						/>
